@@ -1,6 +1,6 @@
 //
 // Árvore Binária - Exemplo de implementação em Java
-// Copyright (C) 2023 André Kishimoto e Jean Marcos Laine (code changed in 2025)
+// Copyright (C) 2024 André Kishimoto & modified by Jean Laine
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-package EDII;
+package ARVBIN;
 
 public class BTNode {
 
@@ -62,7 +62,10 @@ public class BTNode {
 
 	public void setLeft(BTNode left) {
 		this.left = left;
-		left.setParent(this);
+		
+		if (this.left != null) {
+			this.left.setParent(this);
+		}
 	}
 
 	public BTNode getRight() {
@@ -70,7 +73,11 @@ public class BTNode {
 	}
 
 	public void setRight(BTNode right) {
-		//TODO
+		this.right = right;
+		
+		if (this.right != null) {
+			this.right.setParent(this);
+		}
 	}
 
 	public boolean hasLeftChild() {
@@ -82,23 +89,51 @@ public class BTNode {
 	}
 
 	public boolean isRoot() {
-		//TODO
+		return parent == null;
 	}
 
 	public boolean isLeaf() {
-		//TODO
+		return left == null && right == null;
 	}
 
 	public int getDegree() {
-		//TODO
+		int degree = 0;
+		
+		if (hasLeftChild()) {
+			++degree;
+		}
+		
+		if (hasRightChild()) {
+			++degree;
+		}
+		
+		return degree;
 	}
 
 	public int getLevel() {
-		//TODO
+		if (isRoot()) {
+			return 0;
+		}
+
+		return parent.getLevel() + 1;
 	}
 
 	public int getHeight() {
-		//TODO
+		if (isLeaf()) {
+			return 0;
+		}
+
+		int height = 0;
+		
+		if (hasLeftChild()) {
+			height = Math.max(height, left.getHeight());
+		}
+		
+		if (hasRightChild()) {
+			height = Math.max(height, right.getHeight());
+		}
+		
+		return height + 1;
 	}
 
 	@Override
