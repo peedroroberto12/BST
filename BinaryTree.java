@@ -1,6 +1,6 @@
 //
 // Árvore Binária - Exemplo de implementação em Java
-// Copyright (C) 2023 André Kishimoto e Jean Marcos Laine (code changed in 2025)
+// Copyright (C) 2024 André Kishimoto & modified by Jean Laine
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-package EDII;
+package ARVBIN;
 
-// imports para a fila que pode ser usada na levelOrderTraversalHelper(). 
+// imports para a fila usada na levelOrderTraversalHelper(). 
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -43,7 +43,21 @@ public class BinaryTree {
 	}
 
 	private int getDegreeHelper(BTNode node) {
-		//TODO
+		if (node == null || node.isLeaf()) {
+			return 0;
+		}
+
+		int degree = node.getDegree();
+		
+		if (node.hasLeftChild()) {
+			degree = Math.max(degree, getDegreeHelper(node.getLeft()));
+		}
+		
+		if (node.hasRightChild()) {
+			degree = Math.max(degree, getDegreeHelper(node.getRight()));
+		}
+		
+		return degree;
 	}
 
 	public int getHeight() {
@@ -59,7 +73,17 @@ public class BinaryTree {
 	}
 
 	private String inOrderTraversalHelper(BTNode node) {
-		//TODO
+		if (node == null) {
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(inOrderTraversalHelper(node.getLeft()));
+		sb.append(node.getData() + " ");
+		sb.append(inOrderTraversalHelper(node.getRight()));
+		
+		return sb.toString();
 	}
 
 	public String preOrderTraversal() {
@@ -67,7 +91,17 @@ public class BinaryTree {
 	}
 
 	private String preOrderTraversalHelper(BTNode node) {
-		//TODO
+		if (node == null) {
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(node.getData() + " ");
+		sb.append(preOrderTraversalHelper(node.getLeft()));
+		sb.append(preOrderTraversalHelper(node.getRight()));
+		
+		return sb.toString();
 	}
 
 	public String postOrderTraversal() {
@@ -93,7 +127,28 @@ public class BinaryTree {
 	}
 	
 	private String levelOrderTraversalHelper(BTNode node) {
-		//TODO
+		if (node == null) {
+			return "";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+
+		Queue<BTNode> queue = new LinkedList<>();
+		queue.add(node);
+
+		while (!queue.isEmpty()) {
+			BTNode visited = queue.remove();
+			sb.append(visited.getData() + " ");
+
+			if (visited.hasLeftChild()) {
+				queue.add(visited.getLeft());
+			}			
+			if (visited.hasRightChild()) {
+				queue.add(visited.getRight());
+			}
+		}
+		
+		return sb.toString();
 	}
 
 	@Override
@@ -102,6 +157,20 @@ public class BinaryTree {
 				+ ", getDegree(): " + getDegree()
 				+ ", getHeight(): " + getHeight()
 				+ ", root => { " + root + " }";				
+	}
+	
+	
+	public void printNodeInfo() {
+		printNodeInfoGet(root);
+	}
+	
+	//Imprime as informações dos nós usando o percurso EM-ORDEM
+	private void printNodeInfoGet(BTNode root) {
+		if (root != null) {
+			printNodeInfoGet(root.getLeft());
+			System.out.println(root);
+			printNodeInfoGet(root.getRight());
+		}		
 	}
 
 }
